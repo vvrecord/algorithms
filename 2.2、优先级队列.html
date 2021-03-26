@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //数字越小优先级越高
+    function PriorityQueue() {
+        //构造数据项的内部构造函数
+        function QueneItem(item, priority) {
+            this.item = item;
+            this.priority = priority;
+        }
+        //PriorityQueuene内部的属性
+        this.items = [];
+        //优先级队列插入方法
+        PriorityQueue.prototype.enter = function (item, priority) {
+            var queneItem = new QueneItem(item, priority);
+            //获取传入元素的正确位置
+            //1、判断队列是否为空
+            if (this.isEmpty()) {
+                this.items.push(queneItem);
+            } else {
+                let added = false;
+                for (let i = 0; i < this.size(); i++) {
+                    if (queneItem.priority < this.items[i].priority) {
+                        this.items.splice(i, 0, queneItem);
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) {
+                    this.items.push(queneItem);
+                }
+            }
+        }
+        PriorityQueue.prototype.leave = function () {
+            return this.items.shift();
+        }
+        //返回队列第一个元素
+        PriorityQueue.prototype.first = function () {
+            return this.items[0];
+        }
+        //判断是否为空
+        PriorityQueue.prototype.isEmpty = function () {
+            return this.items.length == 0;
+        }
+        //队列元素个数
+        PriorityQueue.prototype.size = function () {
+            return this.items.length;
+        }
+        //tostring
+        PriorityQueue.prototype.toString = function () {
+            var resultString = '';
+            for (let i = 0; i < this.items.length; i++) {
+                resultString += this.items[i].item;
+            }
+            return resultString;
+        }
+    }
+    var priorityQueue = new PriorityQueue();
+    priorityQueue.enter('li',100);
+    priorityQueue.enter('hehe',11);
+    priorityQueue.enter('zeze',110);
+    priorityQueue.enter('moyu',32);
+    console.log(priorityQueue);
+    console.log(priorityQueue.toString())
+</script>
+
+</html>

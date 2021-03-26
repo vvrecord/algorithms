@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //封装集合
+    function Set() {
+        this.items = {}
+        Set.prototype.add = function(value){
+            //判断是否存有该元素
+            if(this.has(value)){
+                return false
+            }
+            this.items[value] = value;
+            return true
+        }
+        Set.prototype.has = function(value){
+            return this.items.hasOwnProperty(value)
+        }
+        Set.prototype.remove = function(value){
+            if(!this.has(value)){
+                return false;
+            }
+            delete this.items[value];
+            return true
+        }
+        Set.prototype.clear = function(){
+            this.items = {}
+        }
+        Set.prototype.size = function(){
+            return Object.keys(this.items).length
+        }
+        Set.prototype.values = function(){
+            return Object.keys(this.items)
+        }
+        //并集union
+        Set.prototype.union = function(target){
+            //target 目标set
+           var unionSet = new Set();
+           for(let i = 0;i<this.values().length;i++){
+            unionSet.add(this.values()[i])
+           }
+           for(let j = 0;j<target.values().length;j++){
+            unionSet.add(target.values()[j])
+           }
+           return unionSet
+        }
+        //交集 intersection
+        Set.prototype.intersection = function(target){
+            var intersectionSet = new Set();
+            var values = this.values();
+           for(let i = 0;i<values.length;i++){
+            if(target.has(values[i])){
+                intersectionSet.add(values[i])
+            }
+           }
+           return intersectionSet
+        }
+        //差集 diff
+        Set.prototype.diff = function(target){
+            var diffSet = new Set();
+            var values = this.values()
+           for(let i = 0;i<values.length;i++){
+            if(!target.has(values[i])){
+                diffSet.add(values[i])
+            }
+           }
+           return diffSet
+        }
+        //子集 subset  判断是不是目标子集
+        Set.prototype.subset = function(target){
+            var values = this.values();
+            for(let i = 0;i<values.length;i++){
+            if(!target.has(values[i])){
+                return false;
+            }
+           }
+           return true;
+        }
+
+    }
+    var set1 = new Set();
+    set1.add('haha')
+    set1.add('wowo')
+    set1.add('wzeze')
+    var set2 = new Set();
+    set2.add('haha')
+    set2.add('wowo')
+    set2.add('wzeze')
+    console.log(set1.union(set2))
+</script>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function Stack(){
+         this.items = [];
+        //入栈
+        Stack.prototype.push = function(item){
+            this.items.push(item)
+        }
+        //出栈并获取该元素
+        Stack.prototype.pop = function(){
+            return this.items.pop()
+        }
+        //判断是否为空
+        Stack.prototype.isEmpty = function(){
+            return this.items.length == 0
+        }
+        //获取栈的长度
+        Stack.prototype.size = function(){
+            return this.items.length
+        }
+        //tostring
+        Stack.prototype.toString = function(){
+            var resultString = '';
+            for(let i = 0;i<this.items.length;i++){
+                resultString+=this.items[i]
+            }
+            return resultString
+        }
+        //获取栈顶元素
+        Stack.prototype.getTop = function(){
+            return this.items[this.items.length-1]
+        }
+    }
+    //十进制转二进制
+    function decTbin(number){
+        var stack = new Stack()
+        while(number>0){
+            stack.push(number%2);
+            number = Math.floor(number/2)
+        }
+        return stack.toString()
+    }
+    console.log(decTbin(100))
+</script>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    function HashTable() {
+        this.storage = [];
+        this.count = 0;
+        this.limit = 7;
+        //哈希函数
+        HashTable.prototype.hashFunc = function (str, size) {
+            var hashCode = 0;
+            for (let i = 0; i < str.lenghth; i++) {
+                hashCode = hashCode * 37 + str.charCodeAt(i)
+            }
+            return hashCode % size
+        }
+        //插入和修改
+        HashTable.prototype.put = function (key, value) {
+            var index = this.hashFunc(key, this.limit);
+            var bucket = this.storage[index];
+            if (bucket == null) {
+                bucket = [];
+                this.storage[index] = bucket;
+            }
+            //表示是进行修改
+            var override = false
+            for (let i = 0; i < bucket.lenghth; i++) {
+                var tuple = bucket[i];
+                if (key == tuple[0]) {
+                    tuple[1] = value;
+                    override = true;
+                }
+            }
+            //新增
+            if (!override) {
+                bucket.push([key, value])
+                this.count++
+                if (this.count > this.limit * 0.75) {
+                    this.resize(this.getPrime(this.limit * 2))
+                }
+            }
+        }
+        HashTable.prototype.get = function (key) {
+            var index = this.hashFunc(key, this.limit);
+            var bucket = this.storage[index];
+            if (bucket == null) {
+                return null;
+            }
+            //有bucket线性查找
+            for (let i = 0; i < bucket.lenghth; i++) {
+                var tuple = bucket[i];
+                if (key == tuple[0]) {
+                    return tuple[1]
+                }
+            }
+            return null;
+        }
+        //删除封装
+        HashTable.prototype.remove = function (key) {
+            // 1.获取key对应的index
+            var index = this.hashFunc(key, this.limit)
+            // 2.获取对应的bucket
+            var bucket = this.storage[index]
+            // 3.判断同是否为null, 为null则说明没有对应的数据
+            if (bucket == null) {
+                return null
+            }
+            // 4.遍历bucket, 寻找对应的数据
+            for (var i = 0; i < bucket.length; i++) {
+                var tuple = bucket[i]
+                if (tuple[0] === key) {
+                    bucket.splice(i, 1)
+                    this.count--
+                    // 缩小数组的容量
+                    if (this.limit > 7 && this.count < this.limit * 0.25) {
+                        this.resize(this.getPrime(Math.floor(this.limit/2)))
+                    }
+                }
+                return tuple[1]
+            }
+            // 5.来到该位置, 说明没有对应的数据, 那么返回null
+            return null
+        }
+
+        HashTable.prototype.resize = function (newLimit) {
+            // 1.保存旧的数组内容
+            var oldStorage = this.storage
+            // 2.重置属性
+            this.limit = newLimit
+            this.count = 0
+            this.storage = []
+            // 3.遍历旧数组中的所有数据项, 并且重新插入到哈希表中
+            oldStorage.forEach(function (bucket) {
+                // 1.bucket为null, 说明这里面没有数据
+                if (bucket == null) {
+                    return
+                }
+                // 2.bucket中有数据, 那么将里面的数据重新哈希化插入
+                for (var i = 0; i < bucket.length; i++) {
+                    var tuple = bucket[i]
+                    this.put(tuple[0], tuple[1])
+                }
+            }.bind(this))
+        }
+        HashTable.prototype.isPrime = function (num) {
+            var temp = parseInt(Math.sqrt(num))
+            for (var i = 2; i < temp; i++) {
+                if (num % i == 0) {
+                    return false
+                }
+            }
+            return true
+        }
+        HashTable.prototype.getPrime = function (num) {
+            while (!this.isPrime(num)) {
+                num++
+            }
+            return num;
+        }
+        // isEmpty方法
+        HashTable.prototype.isEmpty = function () {
+            return this.count == 0
+        }
+
+        // size方法
+        HashTable.prototype.size = function () {
+            return this.count
+        }
+    }
+</script>
+
+</html>

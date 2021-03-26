@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function Queue(){
+        //数组方向 <-----,push进去，shift出来
+        this.items = []
+        //队列尾部添加一个
+        Queue.prototype.enter = function(item){
+            this.items.push(item)
+        }
+        //移除队列头部项，并返回该移除项目
+        Queue.prototype.leave = function(){
+            return this.items.shift()
+        }
+        //返回队列第一个元素
+        Queue.prototype.first = function(){
+            return this.items[0]
+        }
+        //判断是否为空
+        Queue.prototype.isEmpty = function(){
+            return this.items.length ==0
+        }
+        //队列元素个数
+        Queue.prototype.size = function(){
+            return this.items.length
+        }
+        //tostring
+        Queue.prototype.toString = function(){
+            var resultString = '';
+            for(let i = 0;i<this.items.length;i++){
+                resultString+=this.items[i]
+            }
+            return resultString
+        }
+    }
+    var queue = new Queue()
+    queue.enter('a');
+    queue.enter('b')
+    queue.enter('c')
+    console.log(queue.toString())
+    queue.leave()
+    console.log(queue.toString())
+    queue.leave()
+    console.log(queue.toString())
+    queue.leave()
+    console.log(queue.isEmpty())
+</script>
+</html>

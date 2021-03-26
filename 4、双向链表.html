@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    function DoublyLinkedList() {
+        //内部类，节点类
+        function Node(data) {
+            this.data = data;
+            this.prev = null;
+            this.next = null;
+        }
+        //头指针
+        this.head = null;
+        this.tail = null;
+        //记录当前链表的长度
+        this.length = 0;
+        // 1.append
+        DoublyLinkedList.prototype.append = function (data) {
+            var node = new Node(data);
+            // 2.判断链表是否为空
+            if (this.head == null) {
+                this.head = node;
+                this.tail = node;
+            } else {
+                this.tail.next = node;
+                node.prev = this.tail;
+                this.tail = node;
+            }
+            // 3.length+1
+            this.length++;
+        }
+        //2、toString()
+        DoublyLinkedList.prototype.toString = function () {
+            return this.backwardString()
+        }
+        //3、backwardString
+        DoublyLinkedList.prototype.backwardString = function () {
+            var resultString = '';
+            var current = this.head;
+            while (current) {
+                resultString += current.data
+                current = current.next
+            }
+            return resultString;
+        }
+        //4、forwardString
+        DoublyLinkedList.prototype.forwardString = function () {
+            var resultString = '';
+            var current = this.tail;
+            while (current) {
+                resultString += current.data
+                current = current.prev
+            }
+            return resultString;
+        }
+        //5、insert 特定位置插入新的节点
+        DoublyLinkedList.prototype.insert = function (position, data) {
+            //创建新节点
+            var node = new Node(data)
+            //越界判断
+            if (position < 0 || position > this.length) return false
+            //根据position查找位置
+            if (this.length == 0) {
+                //表示链表当前为空
+                this.head = node;
+                this.tail = node;
+            } else {
+                //插入到第一个位置
+                if (position == 0) {
+                    node.next = this.head;
+                    this.head.prev = node;
+                    this.head = node;
+                } else if (position == this.length) {
+                    this.tail.next = node;
+                    node.prev = this.tail;
+                    this.tail = node;
+                } else {
+                    var current = this.head
+                    var index = 0;
+                    while (index++ < position) {
+                        current = current.next
+                    }
+                    //找到了正确的节点
+                    node.next = current;
+                    node.prev = current.prev;
+                    current.prev.next = node
+                    current.prev = node
+                }
+            }
+            this.length += 1;
+            return true
+        }
+        //get 获取某位置信息  同单向链表的方法
+        DoublyLinkedList.prototype.get = function (position) {
+            //越界判断
+            if (position < 0 || position >= this.length) return null;
+            //获取元素
+            var current = this.head;
+            var index = 0
+            while (index++ < position) {
+                current = current.next
+            }
+            return current.data;
+        }
+        //indexOf
+        DoublyLinkedList.prototype.indexOf = function (item) {
+            var current = this.head;
+            var index = 0;
+            while (current) {
+                if (current.data == item) {
+                    return index;
+                }
+                current = current.next;
+                index += 1;
+            }
+            return -1;
+        }
+        DoublyLinkedList.prototype.update = function (position, data) {
+            if (position < 0 || position >= this.length) return false;
+            var current = this.head;
+            var index = 0;
+            while (index++ < position) {
+                current = current.next;
+            }
+            current.data = data;
+            return true;
+        }
+        //
+        DoublyLinkedList.prototype.removeAt = function (position) {
+            //越界判断
+            if (position < 0 || position >= this.length) return null;
+            //判断是否只有一个节点
+            if (this.length == 1) {
+                this.head = null;
+                this.tail = null;
+            } else {
+                if (position == 0) {
+                    this.head.next.prev = null;
+                    this.head = this.head.next;
+                } else if (position == this.length - 1) { //最后一个节点
+                    this.tail.prev.next = null;
+                    this.tail = this.tail.prev;
+                } else {
+                    var current = this.head;
+                    var index = 0;
+                    while (index++ < position) {
+                        current = current.next;
+                    }
+                    //找到了，修改指针
+                    current.prev.next = current.next;
+                    current.next.prev = current.prev;
+                }
+            }
+            this.length -= 1;
+            return true;
+        }
+        //remove
+        DoublyLinkedList.prototype.remove = function (item) {
+            var position = this.indexOf(item);
+            return this.removeAt(position)
+        }
+        //isEmpty
+        DoublyLinkedList.prototype.isEmpty = function () {
+            return this.length == 0;
+        }
+        //size
+        DoublyLinkedList.prototype.size = function () {
+            return this.length;
+        }
+    }
+</script>
+
+</html>

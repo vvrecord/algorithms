@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //增删改查
+    function LinkedList() {
+        //内部类，节点类
+        function Node(data) {
+            this.data = data;
+            this.next = null;
+        }
+        //头指针
+        this.head = null;
+        //记录当前链表的长度
+        this.length = 0;
+        //链表
+        LinkedList.prototype.append = function (data) {
+            //1、创建节点
+            var node = new Node(data)
+            //判断链表是否为空，如果是第一个节点直接插入，不是循环链表
+            if (this.length == 0) {
+                this.head = node //是第一个节点，直接把head指针指向该节点
+            } else {
+                var current = this.head; //此时head和current指向第一个节点，尽量别修改head指针位置
+                while (current.next) { //表示节点不为空，一直循环到链表末尾
+                    current = current.next;
+                }
+                current.next = node; //最后一个节点指向新创建的节点
+            }
+            this.length += 1;
+        }
+        //toString()
+        LinkedList.prototype.toString = function () {
+            var resultString = ''
+            //循环链表
+            var current = this.head;
+            while (current) {
+                resultString += current.data;
+                current = current.next
+            }
+            return resultString;
+        }
+        //insert  1、越界判断
+        LinkedList.prototype.insert = function (position, data) {
+            if (position < 0 || position > this.length) return false
+            //创建节点
+            var node = new Node(data);
+            //插入数据
+            //是否是第一个
+            if (position == 0) {
+                node.next = this.head;
+                this.head = node;
+            } else {
+                var index = 0;
+                var current = this.head;
+                var previous = null;
+                while (index++ < position) {
+                    previous = current;
+                    current = current.next;
+                }
+                node.next = current;
+                previous.next = node;
+            }
+            this.length += 1;
+            return true;
+        }
+        //get
+        LinkedList.prototype.get = function (position) {
+            //等于length的时候为null
+            if (position < 0 || position >= this.length) return false;
+            var current = this.head;
+            var index = 0;
+            while (index++ < position) {
+                current = current.next
+            }
+            return current.data
+        }
+        // indexOf(item)
+        LinkedList.prototype.indexOf = function (item) {
+            var current = this.head;
+            var index = 0;
+            while (current) {
+                if (current.data == item) {
+                    return index;
+                }
+                current = current.next;
+                index += 1;
+            }
+            return -1;
+        }
+        //update
+        LinkedList.prototype.update = function (position, data) {
+            if (position < 0 || position >= this.length) return false; 
+            var current = this.head;
+            var index = 0;
+            while (index++ < position) {
+                current = current.next
+            }
+            current.data = data
+            return true;
+        }
+        //removeAt
+        LinkedList.prototype.removeAt = function(position){
+            //越界判断
+            if (position < 0 || position >= this.length) return false; 
+            //删除的是第一个
+            if(position==0){
+                this.head = this.head.next;
+            }else{
+                var index = 0;
+                var current = this.head;
+                var previous = null;
+                while(index++<position){
+                    previous = current;
+                    current = current.next
+                }
+                previous.next = current.next
+            }
+            this.length-=1;
+            return true;
+        }
+        //remove
+        LinkedList.prototype.remove = function(item){
+            var position = this.indexOf(item);
+            return this.removeAt(position)
+        }
+        //isEmpty
+        LinkedList.prototype.isEmpty = function(){
+            return this.length ==0;
+        }
+        //size
+        LinkedList.prototype.size = function(){
+            return this.length;
+        }
+
+    }
+    var linkedList = new LinkedList();
+    linkedList.append('hello');
+    linkedList.append('world!')
+    linkedList.update(1,'world')
+    console.log(linkedList.toString())
+</script>
+
+</html>
